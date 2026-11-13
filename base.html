@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}BusBuddy | Inventory & Billing{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-icon">B</span><span><strong>BusBuddy</strong><small>Inventory Suite</small></span></a>
+    <div class="side-label">WORKSPACE</div>
+    <nav>
+      <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><span>▦</span> Dashboard</a>
+      <a class="nav-link {% if request.endpoint in ['products','add_product','edit_product'] %}active{% endif %}" href="{{ url_for('products') }}"><span>▤</span> Products</a>
+      <a class="nav-link {% if request.endpoint == 'stock_update' %}active{% endif %}" href="{{ url_for('stock_update') }}"><span>↕</span> Stock updates</a>
+      <a class="nav-link {% if request.endpoint in ['billing','bill_detail'] %}active{% endif %}" href="{{ url_for('billing') }}"><span>▣</span> Create bill</a>
+      <a class="nav-link {% if request.endpoint == 'sales' %}active{% endif %}" href="{{ url_for('sales') }}"><span>▥</span> Sales records</a>
+    </nav>
+    <div class="sidebar-bottom"><div class="status-dot"></div><div><strong>Demo workspace</strong><small>Local SQLite database</small></div></div>
+  </aside>
+  <main class="main-area">
+    <header class="topbar"><div><span class="eyebrow">BUSBUDDY / OPERATIONS</span><h1>{% block page_heading %}Overview{% endblock %}</h1></div><div class="topbar-right"><span class="today">{{ now_date if now_date else '' }}</span><div class="avatar">PM</div></div></header>
+    <section class="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}<button onclick="this.parentElement.remove()" aria-label="Dismiss">×</button></div>{% endfor %}</div>{% endif %}{% endwith %}
+      {% block content %}{% endblock %}
+      <footer>BusBuddy Inventory & Billing <span>•</span> Internship Assessment Prototype</footer>
+    </section>
+  </main>
+</div>
+<script>document.querySelectorAll('[data-confirm]').forEach(el=>el.addEventListener('click',e=>{if(!confirm(el.dataset.confirm))e.preventDefault()}));</script>
+{% block scripts %}{% endblock %}
+</body></html>
